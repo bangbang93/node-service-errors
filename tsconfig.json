@@ -1,0 +1,21 @@
+{
+  "extends": "@tsconfig/node18",
+  "compilerOptions": {
+    "sourceMap": true,
+    "outDir": "lib",
+    "declaration": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "resolveJsonModule": true,
+    "sourceRoot": "src",
+    "incremental": true,
+    "skipLibCheck": true
+  },
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules",
+    "lib"
+  ]
+}
