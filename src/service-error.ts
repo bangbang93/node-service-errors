@@ -68,6 +68,12 @@ export class ServiceError extends VError {
     })
   }
 
+  public static appendStacktrace(error: ServiceError): ServiceError {
+    const newError = new ServiceError(error.code, error.message)
+    error.stack = newError.stack
+    return error
+  }
+
   public toJSON(): Record<string, unknown> {
     return {
       $isServiceError: this.$isServiceError,
