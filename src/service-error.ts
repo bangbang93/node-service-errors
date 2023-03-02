@@ -15,18 +15,13 @@ export class ServiceError extends VError {
   public readonly data?: unknown
   public httpCode?: number
 
-  constructor(code: string, data?: IData)
-  constructor(code: string, message?: string, data?: IData)
-  constructor(code: string, message?: string | IData, data?: IData) {
-    if (typeof message !== 'string') {
-      data = message
-      message = undefined
-    }
+  constructor(code: string, message: string, data?: IData)
+  constructor(code: string, message: string | IData, data?: IData) {
     super({
       name: ServiceError.name,
       cause: data?.causedBy,
       info: data && omit(data, 'causedBy'),
-    }, '%s', typeof message === 'string' ? message : undefined)
+    }, '%s', message)
 
     this.code = code
     if (data) {
