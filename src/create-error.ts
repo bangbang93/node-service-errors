@@ -1,23 +1,23 @@
-import {IData, ServiceError} from './service-error'
-import * as ServiceErrors from './errors.json'
 import {get} from 'lodash'
+import {CommonError} from './apps/common'
+import {IData, ServiceError} from './service-error'
 
-interface Errors {
+interface ErrorDefinition {
   [code: string]: readonly [message: string, httpCode?: number]
 }
-export interface IRawError {
-  codePrefix: string
-  errors: Errors
+
+const ServiceErrors: ErrorDefinition = {
+  ...CommonError,
 }
 
 export {
   ServiceErrors,
 }
 
-type ErrorCode = keyof typeof ServiceErrors
+type ErrorCode = keyof typeof CommonError
 type ProxyFunction = (message?: string, data?: Record<string, unknown>) => ServiceError
 
-export function registerErrors(errors: Errors): void {
+export function registerErrors(errors: ErrorDefinition): void {
   Object.assign(ServiceErrors, errors)
 }
 
