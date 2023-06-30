@@ -1,6 +1,5 @@
-import is from '@sindresorhus/is'
 import {omit} from 'lodash'
-import {VError} from 'verror'
+import {messageWithCauses, stackWithCauses} from 'pony-cause'
 
 export interface IData {
   [key: string]: unknown
@@ -8,30 +7,23 @@ export interface IData {
   httpCode?: number
 }
 
-export class ServiceError extends VError {
+export class ServiceError extends Error {
   public readonly $isServiceError = true
   public readonly code: string
   public readonly name: string = 'ServiceError'
   public readonly data?: unknown
   public httpCode?: number
 
-  constructor(code: string, message: string, data?: IData)
-  constructor(code: string, message: string | IData, data?: IData) {
-    super({
-      name: ServiceError.name,
-      cause: data?.causedBy,
-      info: data && omit(data, 'causedBy'),
-    }, '%s', message)
+  constructor(code: string, message: string, data?: IData) {
+    super(message, {cause: data?.causedBy})
+    this.message = messageWithCauses(this)
 
     this.code = code
-    if (data) {
-      if (is.plainObject(data)) {
-        if (is.number(data.httpCode)) {
-          this.httpCode = data.httpCode
-          delete data.httpCode
-        }
+    if (typeof data === 'object' && data) {
+      if (typeof data.httpCode === 'number') {
+        this.httpCode = data.httpCode
       }
-      this.data = data
+      this.data = omit(data, 'causedBy', 'httpCode')
     }
   }
 
@@ -63,22 +55,16 @@ export class ServiceError extends VError {
     })
   }
 
-  public static appendStacktrace(error: ServiceError): ServiceError {
-    const newError = new ServiceError(error.code, error.message)
-    error.stack = newError.stack
-    return error
-  }
-
   public toJSON(): Record<string, unknown> {
     return {
       $isServiceError: this.$isServiceError,
       code: this.code,
-      stack: VError.fullStack(this as any),
+      stack: stackWithCauses(this),
       message: this.message,
       name: this.name,
-      data: VError.info(this as any),
+      data: this.data,
       httpCode: this.httpCode,
-      cause: VError.cause(this as any),
+      cause: this.cause,
     }
   }
 }

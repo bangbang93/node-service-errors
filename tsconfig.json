@@ -1,11 +1,9 @@
 {
-  "extends": "@tsconfig/node16",
+  "extends": "@tsconfig/node18",
   "compilerOptions": {
     "sourceMap": true,
     "outDir": "lib",
     "declaration": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
     "resolveJsonModule": true,
     "sourceRoot": "src",
     "incremental": true,
