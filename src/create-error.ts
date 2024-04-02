@@ -9,9 +9,7 @@ const ServiceErrors: ErrorDefinition = {
   ...CommonError,
 }
 
-export {
-  ServiceErrors,
-}
+export {ServiceErrors}
 
 type ErrorCode = keyof typeof CommonError
 type ProxyFunction = (message?: string, data?: Record<string, unknown>) => ServiceError

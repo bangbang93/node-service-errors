@@ -29,8 +29,7 @@ export class ServiceError extends Error {
 
   public static fromJSON(json: Record<string, unknown>): ServiceError {
     try {
-      const error = new ServiceError(json.code as string, json.message as string,
-        json.data as IData)
+      const error = new ServiceError(json.code as string, json.message as string, json.data as IData)
       error.httpCode = json.httpCode as number
       return error
     } catch (e) {
