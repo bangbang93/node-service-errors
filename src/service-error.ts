@@ -55,6 +55,10 @@ export class ServiceError extends Error {
     })
   }
 
+  public static isServiceError(error: unknown): error is ServiceError {
+    return typeof error === 'object' && error !== null && (error as Record<string, unknown>).$isServiceError === true
+  }
+
   public toJSON(): Record<string, unknown> {
     return {
       $isServiceError: this.$isServiceError,
