@@ -36,7 +36,9 @@ export class ServiceError extends Error {
     } catch (e) {
       if ('message' in json) {
         const err = new Error(json.message as string)
-        err.stack = json.stack as string
+        if (typeof json.stack === 'string') {
+          err.stack = json.stack
+        }
         Object.assign(err, json)
         return new ServiceError('COMMON_UNKNOWN', '未知错误', {
           causedBy: err,
