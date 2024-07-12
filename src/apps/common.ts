@@ -7,4 +7,5 @@ export const CommonError = {
   COMMON_INVALID_PARAMETER: ['缺少参数', 400],
   COMMON_ALREADY_EXISTS: ['已经存在', 409],
   COMMON_WRONG_STATUS: ['状态错误', 406],
+  COMMON_CAPTCHA_ERROR: ['验证失败', 403],
 } as const
