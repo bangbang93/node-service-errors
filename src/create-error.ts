@@ -5,9 +5,9 @@ interface ErrorDefinition {
   [code: string]: readonly [message: string, httpCode?: number]
 }
 
-const ServiceErrors: ErrorDefinition = {
+const ServiceErrors = {
   ...CommonError,
-}
+} satisfies ErrorDefinition
 
 export {ServiceErrors}
 
@@ -19,7 +19,7 @@ export function registerErrors(errors: ErrorDefinition): void {
 }
 
 function _createError(code: string, message?: string, data?: IData, stackAt?: ProxyFunction): ServiceError {
-  const error = ServiceErrors[code] ?? ServiceErrors.COMMON_UNKNOWN
+  const error = code in ServiceErrors ? ServiceErrors[code as keyof typeof ServiceErrors] : ServiceErrors.COMMON_UNKNOWN
   const serviceError = new ServiceError(code, message ?? error[0], data)
   serviceError.httpCode ??= error[1] as number
   Error.captureStackTrace(serviceError, stackAt ?? _createError)
